@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Microsoft Visual Studio Code
+.vscode
+
+# CMAKE build folder
+build
