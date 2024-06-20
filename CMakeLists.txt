@@ -5,7 +5,8 @@ set (CMAKE_CXX_STANDARD 20)
 
 set(SOURCE_FILES
     WAVFileFromScratch/WAVFileFromScratch.cpp
-    WAVFileFromScratch/SineWave.cpp
+    WAVFileFromScratch/Oscillators.cpp
+    WAVFileFromScratch/utils.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

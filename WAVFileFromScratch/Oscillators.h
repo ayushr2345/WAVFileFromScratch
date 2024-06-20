@@ -1,6 +1,7 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <vector>
 
 namespace oscillators
 {
@@ -19,11 +20,22 @@ namespace oscillators
     {
     private:
         float amplitude { 0.0f };
-        float frequency{ 0.0f };
-        float angle { 0.0f };
-        float offset { 0.0f };
+        float frequency { 0.0f };
+        float angle     { 0.0f };
+        float offset    { 0.0f };
     public:
         SineOscillator(float, float);
-        float GenerateSamples();
+        float GenerateSamples() override;
+    };
+
+    class SquareOscillator : public IOscillator
+    {
+    private:
+        float amplitude { 0.0f };
+        float frequency { 0.0f };
+    public:
+        SquareOscillator(float, float);
+        float GenerateSamples() override {return 0.0f;};
+        float GenerateSamples(int);
     };
 } // namespace oscillators
