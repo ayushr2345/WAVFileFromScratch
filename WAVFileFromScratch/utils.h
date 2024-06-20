@@ -29,23 +29,19 @@ namespace utils
         WriteToFile(                    // No of samples
             audioFile,
             oscillators::g_SampleRate,
-            4
-        );
+            4);
         WriteToFile(                    // Byte rate
             audioFile,
             oscillators::g_SampleRate * oscillators::g_BitDepth * 1 / 8,
-            4
-        );
+            4);
         WriteToFile(                    // Block align
             audioFile,
             oscillators::g_BitDepth * 1 / 8,
-            2
-        );
+            2);
         WriteToFile(                    // Bit Depth   
             audioFile,
             oscillators::g_BitDepth,
-            2
-        );
+            2);
     }
 
     // Should only be called after calling the WriteHeaderAndFormatChunk method
@@ -58,14 +54,16 @@ namespace utils
         audioFile << "data";            // Marks the data chunk
         audioFile << "----";            // Size of data
 
-        int preDataPosition = audioFile.tellp();
+        int preDataPosition = static_cast<int>(audioFile.tellp());
         for (int i = 0; i < duration * oscillators::g_SampleRate; i++)
         {
-            auto sample = oscillator.GenerateSamples();
-            int  intSample = static_cast<int>(sample * oscillators::g_MaxAmplitude);
+            auto sample = oscillator.GenerateSample(i);
+            int  intSample = static_cast<int>(
+                sample * oscillators::g_MaxAmplitude);
+
             WriteToFile(audioFile, intSample, 2);
         }
-        int postDataPosition = audioFile.tellp();
+        int postDataPosition = static_cast<int>(audioFile.tellp());
 
         audioFile.seekp(preDataPosition - 4);
         WriteToFile(audioFile, postDataPosition - preDataPosition, 4);

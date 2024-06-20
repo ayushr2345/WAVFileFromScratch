@@ -1,41 +1,38 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <vector>
 
 namespace oscillators
 {
     const int g_SampleRate   = 44100;
     const int g_BitDepth     = 16;
-    const int g_MaxAmplitude = pow(2, g_BitDepth - 1) - 1;
+    const int g_MaxAmplitude = static_cast<int>(pow(2, g_BitDepth - 1) - 1);
 
     class IOscillator
     {
     public:
         IOscillator() = default;
-        virtual float GenerateSamples() = 0;
+        virtual double GenerateSample(int) = 0;
     };
 
     class SineOscillator : public IOscillator
     {
     private:
-        float amplitude { 0.0f };
-        float frequency { 0.0f };
-        float angle     { 0.0f };
-        float offset    { 0.0f };
+        double amplitude { 0.0f };
+        double frequency { 0.0f };
+        double angle     { 0.0f };
     public:
-        SineOscillator(float, float);
-        float GenerateSamples() override;
+        SineOscillator(double, double);
+        double GenerateSample(int) override;
     };
 
     class SquareOscillator : public IOscillator
     {
     private:
-        float amplitude { 0.0f };
-        float frequency { 0.0f };
+        double amplitude { 0.0f };
+        double frequency { 0.0f };
     public:
-        SquareOscillator(float, float);
-        float GenerateSamples() override {return 0.0f;};
-        float GenerateSamples(int);
+        SquareOscillator(double, double);
+        double GenerateSample(int) override;
     };
 } // namespace oscillators

@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # CMAKE build folder
 build
+
+# WAV file outputs
+WAVFileFromScratch/*.wav

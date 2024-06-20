@@ -4,27 +4,25 @@
 namespace oscillators
 {
     // Sine Oscillator
-    SineOscillator::SineOscillator(float amplitude, float frequency) :
+    SineOscillator::SineOscillator(double amplitude, double frequency) :
         amplitude { amplitude },
         frequency { frequency }
     {
-        offset = 2 * M_PI * frequency / g_SampleRate;
+        angle = 2 * M_PI * frequency / g_SampleRate;
     }
 
-    float SineOscillator::GenerateSamples()
+    double SineOscillator::GenerateSample(int n)
     {
-        auto sample = amplitude * sin(angle);
-        angle += offset;
-        return sample;
+        return  amplitude * sin(n * angle);
     }
 
     // Square Oscillator
-    SquareOscillator::SquareOscillator(float amplitude, float frequency) :
+    SquareOscillator::SquareOscillator(double amplitude, double frequency) :
         amplitude { amplitude },
         frequency { frequency }
     {}
 
-    float SquareOscillator::GenerateSamples(int n)
+    double SquareOscillator::GenerateSample(int n)
     {
         return amplitude * pow(-1, floor(2 * frequency * n / g_SampleRate));
     }
