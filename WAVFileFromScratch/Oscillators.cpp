@@ -1,12 +1,12 @@
-#include "SineWave.h"
+#include "Oscillators.h"
 
-namespace oscillator
+namespace oscillators
 {
     SineOscillator::SineOscillator(float amplitude, float frequency) :
         amplitude { amplitude },
         frequency { frequency }
     {
-        offset = 2 * M_PI * frequency / sampleRate;
+        offset = 2 * M_PI * frequency / g_SampleRate;
     }
 
     float SineOscillator::GenerateSamples()
@@ -15,4 +15,4 @@ namespace oscillator
         angle += offset;
         return sample;
     }
-} // namespace oscillator
+} // namespace oscillators

@@ -127,11 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SineWave.cpp" />
+    <ClCompile Include="Oscillators.cpp" />
     <ClCompile Include="WAVFileFromScratch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SineWave.h" />
+    <ClInclude Include="Oscillators.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
