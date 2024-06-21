@@ -1,74 +1,95 @@
 #pragma once
+#include <map>
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <fstream>
 #include "Oscillators.h"
 
+#ifndef _WIN32
+#include <limits>
+#include <cstring>
+#endif	
+
+
 namespace utils
 {
-    void WriteToFile(std::ofstream& audioFile, int value, int size)
-    {
-        audioFile.write(reinterpret_cast<const char*>(&value), size);
-        // size is the number of bytes we want to write in the audio file
-        // here size because int is 4 bytes and char is 1 byte maxAmplitude
-        // is 32767 and samples will range from +32767 to -32767 which only 
-        // needs 2 bytes of the 4 byte integer, hence only 2 bytes are 
-        // written in the audio file
-    }
+	enum MainMenu
+	{
+		MIN_COUNT   = 0,
+		SINE_WAVE   = 1,
+		SQUARE_WAVE = 2,
+		EXIT		= 3,
+		MAX_COUNT   = EXIT
+	};
 
-    void WriteHeaderAndFormatChunk(std::ofstream& audioFile)
-    {
-        // Header Chunk
-        audioFile << "RIFF";            // Marks the file as RIFF file
-        audioFile << "----";            // Size of the overall file
-        audioFile << "WAVE";            // File Type Header
+	// Used so that this MainMenuArray is available to the main.cpp
+	// and we can print the selected choice.
+	static std::map<int, std::string> MainMenuMap =
+	{
+		{
+			MainMenu(SINE_WAVE),
+			std::string("Sine Wave")
+		},
+		{
+			MainMenu(SQUARE_WAVE),
+			std::string("Square Wave")
+		},
+		{
+			MainMenu(EXIT),
+			std::string("Exit from program")
+		}
+	};
 
-        // Format Chunk
-        audioFile << "fmt ";            // Format chunk marker
-        WriteToFile(audioFile, 16, 4);  // Length of format data
-        WriteToFile(audioFile, 1, 2);   // Compression code (PCM - 1)
-        WriteToFile(audioFile, 1, 2);   // No of channels
-        WriteToFile(                    // No of samples
-            audioFile,
-            oscillators::g_SampleRate,
-            4);
-        WriteToFile(                    // Byte rate
-            audioFile,
-            oscillators::g_SampleRate * oscillators::g_BitDepth * 1 / 8,
-            4);
-        WriteToFile(                    // Block align
-            audioFile,
-            oscillators::g_BitDepth * 1 / 8,
-            2);
-        WriteToFile(                    // Bit Depth   
-            audioFile,
-            oscillators::g_BitDepth,
-            2);
-    }
+	void PrintWelcomeScreen();
+	void PrintMainMenu();
+	void PrintSecondaryMenu();
+	void PrintSelectedChoice(const int&);
+	void ClearCinFlag();
+	void IgnoreStdCinBufferTillEOL();
+	bool CheckAndClearCharactersInStream(const char[], const int);
 
-    // Should only be called after calling the WriteHeaderAndFormatChunk method
-    void WriteDataChunk(
-        std::ofstream& audioFile,
-        oscillators::IOscillator& oscillator,
-        int duration)
-    {
-        // Data Chunk
-        audioFile << "data";            // Marks the data chunk
-        audioFile << "----";            // Size of data
+	// templates should not have definition in a separate source file 
+	// as it would give compilation and linking errors
+	template<typename T>
+	void InputNumberFromUser(
+		T& choice,
+		T range_start = std::numeric_limits<T>::min(),
+		T range_stop = std::numeric_limits<T>::max())
+	{
+		std::cin >> choice;
+		while (std::cin.fail() ||
+			   std::cin.peek() != '\n' ||
+			   choice < range_start ||
+			   choice > range_stop)
+		{
+			ClearCinFlag();
+			IgnoreStdCinBufferTillEOL();
+			std::cout << "Wrong input type!";
+			std::cout << "Please enter a value within range : "
+				      << range_start << " to " << range_stop << ": ";
+			std::cin >> choice;
+		}
+	}
+	void InputParametersFromUser(double&, double&, int&);
+	void SetParameterDefaults(double&, double&, int&);
+	void InputParametersFromUserMenuBased(double&, double&, int&);
 
-        int preDataPosition = static_cast<int>(audioFile.tellp());
-        for (int i = 0; i < duration * oscillators::g_SampleRate; i++)
-        {
-            auto sample = oscillator.GenerateSample(i);
-            int  intSample = static_cast<int>(
-                sample * oscillators::g_MaxAmplitude);
+	template <typename T>
+	std::string ConvertToStringWithPrecision(const T value, const int n = 6)
+	{
+		std::ostringstream out;
+		out.precision(n);
+		out << std::fixed << value;
+		return std::move(out).str();
+	}
+} //namespace utils
 
-            WriteToFile(audioFile, intSample, 2);
-        }
-        int postDataPosition = static_cast<int>(audioFile.tellp());
+namespace wavUtils
+{
+    void WriteToFile(std::ofstream& audioFile, int value, int size);
+	void WriteHeaderAndFormatChunk(std::ofstream& audioFile);
 
-        audioFile.seekp(preDataPosition - 4);
-        WriteToFile(audioFile, postDataPosition - preDataPosition, 4);
-
-        audioFile.seekp(4, std::ios::beg);
-        WriteToFile(audioFile, postDataPosition - 8, 4);
-    }
-} // namespace utils
+    // Should only be called after calling WriteHeaderAndFormatChunk method
+	void WriteDataChunk(std::ofstream&, oscillators::IOscillator&, int);
+} // namespace wavUtils
