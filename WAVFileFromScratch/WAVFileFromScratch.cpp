@@ -22,10 +22,16 @@ int main()
 		{
 		case 1:
 		{
-			utils::InputParametersFromUserMenuBased(
-				frequency,
-				amplitude,
-				duration);
+			bool isInputSuccessful = 
+				utils::InputParametersFromUserMenuBased(
+					frequency,
+					amplitude,
+					duration);
+
+			if (isInputSuccessful == false)
+			{
+				break;
+			}
 			
 			oscillators::SineOscillator sineOscillator(amplitude, frequency);
 			std::ofstream audioFile;
@@ -42,15 +48,22 @@ int main()
 			wavUtils::WriteDataChunk(audioFile, sineOscillator, duration);
 			
 			audioFile.close();
-			std::cout << "Sine wave generated successfully" << std::endl;
+			std::cout << "Sine wave with file name: " << fileName <<
+						 " generated successfully" << std::endl;
 			break;
 		}
 		case 2:
 		{
-			utils::InputParametersFromUserMenuBased(
-				frequency,
-				amplitude,
-				duration);
+			bool isInputSuccessful =
+				utils::InputParametersFromUserMenuBased(
+					frequency,
+					amplitude,
+					duration);
+
+			if (isInputSuccessful == false)
+			{
+				break;
+			}
 
 			oscillators::SquareOscillator squareOscillator(
 				amplitude,
@@ -69,10 +82,79 @@ int main()
 			wavUtils::WriteDataChunk(audioFile, squareOscillator, duration);
 
 			audioFile.close();
-			std::cout << "Square wave generated successfully" << std::endl;
+			std::cout << "Square wave with file name: " << fileName <<
+						 " generated successfully" << std::endl;
 			break;
 		}
 		case 3:
+		{
+			bool isInputSuccessful =
+				utils::InputParametersFromUserMenuBased(
+					frequency,
+					amplitude,
+					duration);
+			 
+			if (isInputSuccessful == false)
+			{
+				break;
+			}
+
+			oscillators::TriangleOscillator triangleOscillator(
+				amplitude,
+				frequency);
+			std::ofstream audioFile;
+
+			std::string fileName = "Triangle_" +
+				utils::ConvertToStringWithPrecision<double>(frequency, 2) +
+				"Hz_" +
+				utils::ConvertToStringWithPrecision<double>(amplitude, 2) +
+				"_" +
+				std::to_string(duration) + "s.wav";
+
+			audioFile.open(fileName, std::ios::binary);
+			wavUtils::WriteHeaderAndFormatChunk(audioFile);
+			wavUtils::WriteDataChunk(audioFile, triangleOscillator, duration);
+
+			audioFile.close();
+			std::cout << "Triangle wave with file name: " << fileName <<
+						 " generated successfully" << std::endl;
+			break;
+		}
+		case 4:
+		{
+			bool isInputSuccessful =
+				utils::InputParametersFromUserMenuBased(
+					frequency,
+					amplitude,
+					duration);
+
+			if (isInputSuccessful == false)
+			{
+				break;
+			}
+
+			oscillators::SawtoothOscillator sawtoothOscillator(
+				amplitude,
+				frequency);
+			std::ofstream audioFile;
+
+			std::string fileName = "Sawtooth_" +
+				utils::ConvertToStringWithPrecision<double>(frequency, 2) +
+				"Hz_" +
+				utils::ConvertToStringWithPrecision<double>(amplitude, 2) +
+				"_" +
+				std::to_string(duration) + "s.wav";
+
+			audioFile.open(fileName, std::ios::binary);
+			wavUtils::WriteHeaderAndFormatChunk(audioFile);
+			wavUtils::WriteDataChunk(audioFile, sawtoothOscillator, duration);
+
+			audioFile.close();
+			std::cout << "Sawtooth wave with file name: " << fileName <<
+					     " generated successfully" << std::endl;
+			break;
+		}
+		case 5:
 		{
 			exit(0);
 		}

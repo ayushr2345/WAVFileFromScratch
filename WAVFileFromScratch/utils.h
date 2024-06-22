@@ -16,11 +16,13 @@ namespace utils
 {
 	enum MainMenu
 	{
-		MIN_COUNT   = 0,
-		SINE_WAVE   = 1,
-		SQUARE_WAVE = 2,
-		EXIT		= 3,
-		MAX_COUNT   = EXIT
+		MIN_COUNT     = 0,
+		SINE_WAVE     = 1,
+		SQUARE_WAVE   = 2,
+		TRIANGLE_WAVE = 3,
+		SAWTOOTH_WAVE = 4,
+		EXIT		  = 5,
+		MAX_COUNT     = EXIT
 	};
 
 	// Used so that this MainMenuArray is available to the main.cpp
@@ -34,6 +36,14 @@ namespace utils
 		{
 			MainMenu(SQUARE_WAVE),
 			std::string("Square Wave")
+		},
+		{
+			MainMenu(TRIANGLE_WAVE),
+			std::string("Triangle Wave")
+		},
+		{
+			MainMenu(SAWTOOTH_WAVE),
+			std::string("Sawtooth Wave")
 		},
 		{
 			MainMenu(EXIT),
@@ -73,7 +83,7 @@ namespace utils
 	}
 	void InputParametersFromUser(double&, double&, int&);
 	void SetParameterDefaults(double&, double&, int&);
-	void InputParametersFromUserMenuBased(double&, double&, int&);
+	bool InputParametersFromUserMenuBased(double&, double&, int&);
 
 	template <typename T>
 	std::string ConvertToStringWithPrecision(const T value, const int n = 6)

@@ -83,8 +83,6 @@ namespace utils
 
 		std::cout << "3. Duration in seconds (1 - 5): ";
 		InputNumberFromUser<int>(duration, 1, 5);
-
-		std::cout << amplitude << " " << frequency << " " << duration << std::endl;
 	}
 
 	void SetParameterDefaults(
@@ -97,7 +95,7 @@ namespace utils
 		duration  = 5;
 	}
 	
-	void InputParametersFromUserMenuBased(
+	bool InputParametersFromUserMenuBased(
 		double& frequency,
 		double& amplitude,
 		int& duration)
@@ -105,15 +103,21 @@ namespace utils
 		int secondaryChoice{ 0 };
 		utils::PrintSecondaryMenu();
 		std::cout << "Please select one from the above: ";
-		utils::InputNumberFromUser<int>(secondaryChoice, 1, 2);
+		utils::InputNumberFromUser<int>(secondaryChoice, 1, 3);
 
 		if (secondaryChoice == 1)
 		{
 			utils::SetParameterDefaults(frequency, amplitude, duration);
+			return true;
+		}
+		else if (secondaryChoice == 2)
+		{
+			utils::InputParametersFromUser(frequency, amplitude, duration);
+			return true;
 		}
 		else
 		{
-			utils::InputParametersFromUser(frequency, amplitude, duration);
+			return false;
 		}
 	}
 } // namespace utils
