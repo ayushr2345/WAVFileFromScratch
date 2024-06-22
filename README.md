@@ -1,13 +1,22 @@
 # WAVFileFromScratch
-A project for creating WAV file using C++. The duration and the type of sound
-is taken as input from the user and a WAV file is generated using those
-parameters. It generates a sound of 440 Hz (A note).
+A project for creating WAV file using C++. 
+<br>
+The type of wave, frequency, amplitude and the duration 
+is taken as input from the user and a WAV file is generated 
+using those parameters. By default it produces a wave with 
+frequency of 440 Hz (A note) for 5 seconds and amplitude of 0.5.
+<br>
+Supported waves:
+* Sine wave
+* Square wave
+* Triangle wave
+* Sawtooth wave
 
 <br>
 
 This project took inspration from 
 [Akash Murthy's youtube channel](https://www.youtube.com/watch?v=qqjvB_VxMRM&list=PLrs18WYDlpOKi-R7YqpIPPqMSL8Tvmsd4&index=5)
-and new types of sounds have been added.
+and additional functionalities with types of waves have been added.
 
 ## Compilation
 ### To compile project using CMake:
